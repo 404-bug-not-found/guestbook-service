@@ -4,10 +4,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.galvanize.guestbookserviceapi.dto.GuestBookDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -19,6 +24,7 @@ import javax.transaction.Transactional;
 @SpringBootTest
 @AutoConfigureMockMvc
 @Transactional
+@AutoConfigureRestDocs
 public class GuestBookServiceIT {
 
     @Autowired
@@ -53,6 +59,10 @@ public class GuestBookServiceIT {
                 get("/guestbook"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("length()").value(1))
-                .andDo(print());
+                .andDo(print())
+        .andDo(document("guestBook",responseFields(
+                fieldWithPath("[0].name").description("Name of visitor"),
+                fieldWithPath("[0].comment").description("visitor comment")
+        )));
     }
 }
