@@ -11,8 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -53,14 +52,18 @@ public class GuestBookServiceIT {
                 .content(objectMapper.writeValueAsString(input1))
                 .contentType(MediaType.APPLICATION_JSON)
         )
-                .andExpect(status().isCreated());
+                .andExpect(status().isCreated())
+        .andDo(document("comment",requestFields(
+                fieldWithPath("name").description("Name of visitor"),
+                fieldWithPath("comment").description("visitor comment")
+        )));
 
         mockMvc.perform(
                 get("/guestbook"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("length()").value(1))
                 .andDo(print())
-        .andDo(document("guestBook",responseFields(
+        .andDo(document("guestbook",responseFields(
                 fieldWithPath("[0].name").description("Name of visitor"),
                 fieldWithPath("[0].comment").description("visitor comment")
         )));

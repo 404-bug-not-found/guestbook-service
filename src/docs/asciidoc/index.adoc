@@ -2,16 +2,22 @@ GuestBook Service
 
 GuestBook
 
-.request
-include::{snippets}/guestBook/http-request.adoc[]
-
 .response
-include::{snippets}/guestBook/http-response.adoc[]
+include::{snippets}/guestbook/http-response.adoc[]
 
 AddComment
 
 .request
-include::{snippets}/guestBook/http-request.adoc[]
+include::{snippets}/comment/http-request.adoc[]
 
 .response
-include::{snippets}/guestBook/http-response.adoc[]
+include::{snippets}/comment/http-response.adoc[]
+
+
+GetComment
+
+.request
+include::{snippets}/guestbook/http-request.adoc[]
+
+.response
+include::{snippets}/guestbook/http-response.adoc[]
