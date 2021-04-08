@@ -93,4 +93,36 @@ public class GuestBookServiceIT {
                 .andDo(print());
 
     }
+
+    @Test
+    void putMultipleCommentsTest() throws Exception{
+
+        GuestBookDto input1 = new GuestBookDto("Iqbal", "GuestBook Comment from Iqbal");
+        GuestBookDto input2 = new GuestBookDto("Sai", "GuestBook Comment from Sai");
+
+        mockMvc.perform(
+                post("/guestbook/comment")
+                        .content(objectMapper.writeValueAsString(input1))
+                        .contentType(MediaType.APPLICATION_JSON)
+        )
+                .andExpect(status().isCreated())
+                .andDo(print());
+
+        mockMvc.perform(
+                post("/guestbook/comment")
+                        .content(objectMapper.writeValueAsString(input2))
+                        .contentType(MediaType.APPLICATION_JSON)
+        )
+                .andExpect(status().isCreated())
+                .andDo(print());
+
+        mockMvc.perform(
+                get("/guestbook"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("length()").value(2))
+                .andExpect(jsonPath("[0].name").value("Iqbal"))
+                .andExpect(jsonPath("[1].name").value("Sai"))
+                .andDo(print());
+
+    }
 }
