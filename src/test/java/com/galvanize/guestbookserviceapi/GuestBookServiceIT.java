@@ -53,17 +53,14 @@ public class GuestBookServiceIT {
                 .contentType(MediaType.APPLICATION_JSON)
         )
                 .andExpect(status().isCreated())
-        .andDo(document("comment",requestFields(
-                fieldWithPath("name").description("Name of visitor"),
-                fieldWithPath("comment").description("visitor comment")
-        )));
+        .andDo(document("AddComment"));
 
         mockMvc.perform(
                 get("/guestbook"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("length()").value(1))
                 .andDo(print())
-        .andDo(document("guestbook",responseFields(
+        .andDo(document("GuestBook",responseFields(
                 fieldWithPath("[0].name").description("Name of visitor"),
                 fieldWithPath("[0].comment").description("visitor comment")
         )));
