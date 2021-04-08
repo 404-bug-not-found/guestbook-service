@@ -2,6 +2,8 @@ package com.galvanize.guestbookserviceapi;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.galvanize.guestbookserviceapi.dto.GuestBookDto;
+import com.galvanize.guestbookserviceapi.entity.GuestBookEntity;
+import com.galvanize.guestbookserviceapi.repository.GuestBookRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
@@ -31,6 +33,9 @@ public class GuestBookServiceIT {
 
     @Autowired
     ObjectMapper objectMapper;
+
+    @Autowired
+    GuestBookRepository guestBookRepository;
 
     @Test
     void getAllGuestBookCommentsTest() throws Exception{
@@ -64,5 +69,28 @@ public class GuestBookServiceIT {
                 fieldWithPath("[0].name").description("Name of visitor"),
                 fieldWithPath("[0].comment").description("visitor comment")
         )));
+    }
+
+    @Test
+    void putDuplicateCommentTest() throws Exception{
+
+        GuestBookDto input1 = new GuestBookDto("Iqbal", "First GuestBook Comment");
+
+        mockMvc.perform(
+                post("/guestbook/comment")
+                        .content(objectMapper.writeValueAsString(input1))
+                        .contentType(MediaType.APPLICATION_JSON)
+        )
+                .andExpect(status().isCreated())
+                .andDo(print());
+
+        mockMvc.perform(
+                post("/guestbook/comment")
+                        .content(objectMapper.writeValueAsString(input1))
+                        .contentType(MediaType.APPLICATION_JSON)
+        )
+                .andExpect(status().isConflict())
+                .andDo(print());
+
     }
 }
