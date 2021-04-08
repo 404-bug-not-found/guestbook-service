@@ -2,7 +2,6 @@ package com.galvanize.guestbookserviceapi;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.galvanize.guestbookserviceapi.dto.GuestBookDto;
-import com.galvanize.guestbookserviceapi.entity.GuestBookEntity;
 import com.galvanize.guestbookserviceapi.repository.GuestBookRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

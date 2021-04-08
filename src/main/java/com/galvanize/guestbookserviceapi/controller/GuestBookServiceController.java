@@ -15,10 +15,6 @@ public class GuestBookServiceController {
     @Autowired
     private GuestBookService guestBookService;
 
-    /*@GetMapping
-    public String getAllGuestBookEntries(){
-        return "{}";
-    }*/
 
     @GetMapping
     public List<GuestBookDto> getAllGuestBookEntries(){
