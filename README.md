@@ -16,13 +16,17 @@ Plugins: Lombok
 2. Setup project in IntelliJ IDEA
 3. Fetch and pull latest code from branch main.
 4. Run the integration test - GuestBookServiceIT
-5. Create docker repository and build & push the image. 
-6. heroku login
-7. heroku git:remote -a guestbook-service-01
-8. heroku container:login
-9. heroku container:push web
-10. heroku container:release web
-11. Open the app url in browser: https://guestbook-service-01.herokuapp.com/guestbook
+5. download the postgres image: `docker pull postgres`
+6. start the postgres container: `docker run --name postgres -e POSTGRES_PASSWORD=open -p 5432:5432 -d postgres`
+7. Create the docker network: `docker network create --driver bridge guest-network`
+8. Start Database Server on Network: `docker run --name postgres-db-cotainer --network guest-network -e POSTGRES_PASSWORD=open -e POSTGRES_DB=postgres -d postgres`
+9. Build local docker image of project: `docker build -t guestbook-image .`
+10. Start Docker Container based on Image: `docker run --name guestbook_postgres_container --network guest-network -e PORT=8080 -e SPRING_PROFILES_ACTIVE=postgres -p 9000:8080 -d guestbook-image:latest`
+11. Run the GuestBook service with postgres DB : `http://localhost:9000/guestbook`
+12. Refer the REST Documentation for end point details
+    
+
+**Heroku App Url:** `https://guestbook-service-01.herokuapp.com/guestbook`
 
 # **End Point Details (REST Documentation):**
 
